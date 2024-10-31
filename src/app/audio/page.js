@@ -112,7 +112,7 @@ const Page = () => {
   };
 
   return (
-    <div className='container mx-auto p-4 ml-20 mt-20 mr-20'>
+    <div className='container mx-auto p-4 lg:ml-20 mt-20 mr-20'>
       <h1 className='text-2xl font-bold'>Audio Recorder</h1>
       <div className='flex items-center mt-4 space-x-4'>
         <button 
@@ -131,7 +131,7 @@ const Page = () => {
               <TableRow className="space-x-6">
                 <TableHead className='px-6 py-4 text-left w-1/5'>ID</TableHead>
                 <TableHead className='px-6 py-4 text-left w-2/5'>Date</TableHead>
-                <TableHead className='px-6 py-4 text-left w-2/5'>Actions</TableHead>
+                <TableHead className='px-6 py-4 text-left w-3/5'>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

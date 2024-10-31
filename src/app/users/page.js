@@ -58,7 +58,6 @@ const Users = () => {
   const handleDeleteUser = async (id) => {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
-        console.log("Deleting user with id:", id);
         const { data } = await deleteUser({ variables: { id } });
 
         if (data.deleteUser) {

@@ -30,7 +30,6 @@ const AlbumModal = ({ isOpen, onClose, selectedAlbum }) => {
 
   useEffect(() => {
     if (selectedAlbum) {
-        console.log('selectedAlbum', selectedAlbum)
       setTitle(selectedAlbum.title);
       setUserId(selectedAlbum.userId);
     } else {
@@ -38,8 +37,6 @@ const AlbumModal = ({ isOpen, onClose, selectedAlbum }) => {
       setUserId("");
     }
   }, [selectedAlbum]);
-
-  console.log('selectedAlbum', selectedAlbum)
 
   const handleSubmit = async (e) => {
     e.preventDefault();

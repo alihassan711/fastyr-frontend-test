@@ -54,7 +54,6 @@ const UserModal = ({ isOpen, onClose, selectedUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('name', name, email)
 
     if (selectedUser && (!name || !email)) {
         toast.error("All fields are required for User Creation.");
@@ -73,13 +72,11 @@ const UserModal = ({ isOpen, onClose, selectedUser }) => {
 
     try {
       if (selectedUser) {
-        console.log('selectedUser update', selectedUser, name, username, email)
         await updateUser({
           variables: { id: selectedUser.id, name, email },
         });
         toast.success("User updated successfully!");
       } else {
-        console.log('name, username, email', name, username, email)
         await createUser({
           variables: { name, username, email },
         });

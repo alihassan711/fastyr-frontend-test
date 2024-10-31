@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import AlbumModal from "@/components/Modals/AlbumModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import * as XLSX from 'xlsx'; 
+import * as XLSX from "xlsx";
 
 const GET_ALBUMS = gql`
   query {
@@ -126,22 +126,32 @@ const AlbumsPage = () => {
   };
 
   const validateAndSetAlbums = (albums) => {
-    const hasTitleColumn = albums.some(album => 'title' in album);
-    const hasUserIdColumn = albums.some(album => 'userId' in album);
-
+    const hasTitleColumn = albums.some((album) => "title" in album);
+    const hasUserIdColumn = albums.some((album) => "userId" in album);
     if (!hasTitleColumn || !hasUserIdColumn) {
-      toast.error("Error: The uploaded file must contain both 'title' and 'userId' columns.");
+      toast.error(
+        "Error: The uploaded file must contain both 'title' and 'userId' columns."
+      );
       return;
     }
-
-    albums.forEach(album => {
-      if (album.title && album.userId) {
-        createAlbum({ variables: { title: album.title, userId: album.userId } });
+  
+    albums.forEach((album) => {
+      if (album.title && album.userId && typeof album.userId === "number") {
+        createAlbum({
+          variables: { title: album.title, userId: album.userId },
+        });
+      } else if (album.userId && typeof album.userId !== "number") {
+        toast.error(`Error: 'userId' must be a number for album "${album.title}".`);
       }
     });
 
     toast.success("Albums imported successfully!");
     refetch();
+  };
+
+  const handleEditAlbum = (album) => {
+    setSelectedAlbum(album);
+    setIsCreating(true);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -150,12 +160,21 @@ const AlbumsPage = () => {
   return (
     <div className="container mx-auto p-8 lg:pl-20 mt-16">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Album Management</h1>
+        <h1 className="text-md sm:text-lg lg:text-2xl font-bold">Album Management</h1>
         <div>
+          <label className="inline-flex items-center font-semibold px-4 py-[6px] shadow rounded-md text-gray-700 bg-white hover:bg-green-900 hover:text-white cursor-pointer transition duration-200">
+            Import Albums
+            <input
+              type="file"
+              accept=".csv, .xlsx"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
           <Button
             onClick={handleCreateAlbum}
             variant="primary"
-            className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 mr-2"
+            className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ml-2"
           >
             Create Album
           </Button>
@@ -170,12 +189,6 @@ const AlbumsPage = () => {
           )}
         </div>
       </div>
-      <input
-            type="file"
-            accept=".csv, .xlsx"
-            onChange={handleFileChange}
-            className="mb-4"
-    />
       {errorMessages.length > 0 && (
         <div className="text-red-500 mb-4">
           {errorMessages.map((error, index) => (
@@ -224,7 +237,7 @@ const AlbumsPage = () => {
                     View
                   </Button>
                   <Button
-                    onClick={() => handleEditUser(album.user)}
+                    onClick={() => handleEditAlbum(album)}
                     variant="outline"
                     className="mb-2 md:mb-0"
                   >
